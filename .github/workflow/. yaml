@@ -29,4 +29,12 @@ jobs:
         name:deploy to aws EB
         uses:einaregilsson/beanstalk-deploy@v21
         with:
-          aws-access_key:
+          aws-access_key: ${{secrets.AWS_ACCES_KEY_ID}}
+          aws_secret_key: ${{secrets.AWS_SECRET_ACCES_KEY}}
+          application_name: Raknare API
+          enviroment_name: RaknareAPI-env
+          version_lanel: ${{github.run_id}}
+          region: eu-north-1
+          deployment_package:site.zip
+
+
