@@ -32,7 +32,7 @@ jobs:
         uses: einaregilsson/beanstalk-deploy@v21
         with:
           aws_access_key: ${AKIA6GBMBSV4HV2TS6YS}}
-          aws_secret_key: ${{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}}
+          aws_secret_key: ${3e066j+eBJiuvsLJZMvjPpUzcnz4L2o5Dnggj97L}}
           application_name: Raknare API
           environment_name: RaknareAPI-env
           version_label: ${{ github.run_id }}
