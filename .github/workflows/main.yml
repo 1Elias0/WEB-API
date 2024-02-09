@@ -24,6 +24,10 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+         - name: List files for debugging
+           run: ls -la
+
+
       - name: Deploy to aws EB if version does not exist
         if: steps.check_version.outputs.skip != 'true'
         uses: einaregilsson/beanstalk-deploy@v21
