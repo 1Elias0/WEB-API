@@ -25,17 +25,33 @@ jobs:
       - name: create zip package
         run: cd site; zip ../site.zip *;
  
-      - name: Deploy to aws EB
+      - name: Check if version exists in EB
+        id: check_version
+        run: |
+          VERSION_EXISTS=$(aws elasticbeanstalk describe-application-versions --application-name "Raknare API" --version-labels "${{ github.run_id }}" --region eu-north-1 | jq '.ApplicationVersions | length')
+          echo "VERSION_EXISTS=$VERSION_EXISTS" >> $GITHUB_ENV
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Remove existing version if exists
+        if: env.VERSION_EXISTS > 0
+        run: |
+          aws elasticbeanstalk delete-application-version --application-name "Raknare API" --version-label "${{ github.run_id }}" --region eu-north-1 --delete-source-bundle
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Deploy to AWS EB
         uses: einaregilsson/beanstalk-deploy@v21
         with:
-          aws_access_key: ${{secrets.AWS_ACCESS_KEY_ID}}
-          aws_secret_key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: Raknare API
           environment_name: RaknareAPI-env
           version_label: ${{ github.run_id }}
           region: eu-north-1
           deployment_package: site.zip
- 
  
 #Trigger actions
 
