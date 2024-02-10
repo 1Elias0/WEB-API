@@ -65,4 +65,4 @@ char DecryptDigit(char digit)
     return (char)decryptedDigit;
 }
 
-//hejdå//
+//hej//
